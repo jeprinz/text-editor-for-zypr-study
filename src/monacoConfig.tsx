@@ -1,5 +1,7 @@
 // import loader from "@monaco-editor/loader";
+import Editor, { loader } from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
+import { MutableRefObject, ReactElement, useRef } from "react";
 
 /*
 This function sets up some configuration for monaco.
@@ -26,6 +28,7 @@ connected to the internet. Is it getting monaco from a cdn?
 */
 
 export const monacoConfig2 = () => {
+    loader.config({monaco}); // makes it use the instance of monaco provided by webpack/node instead of the one at a central CDN
     const wrapper = document.getElementById("root");
     // wrapper.style.height = "100vh";
     const properties = {
@@ -61,10 +64,11 @@ export const monacoConfig2 = () => {
 // }
 
 // export function pusherror(errors){
-//     loader.init().then(monaco => {
-//         // monaco.editor.setModelMarkers(monaco.editor.getModel(), "owner", errors);
-//         monaco.editor.setModelMarkers()
-//     });
+//     // loader.init().then(monaco => {
+//     //     // monaco.editor.setModelMarkers(monaco.editor.getModel(), "owner", errors);
+//     //     monaco.editor.setModelMarkers()
+//     // });
+//         monaco.editor.setModelMarkers(monaco.editor.getModel(), "owner", [])
 // }
 
 /*

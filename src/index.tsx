@@ -1,28 +1,48 @@
-import React from "react";
+import React, { useRef, ReactElement } from "react";
 import * as ReactDOM from 'react-dom';
 
 import Editor  from "@monaco-editor/react";
+import * as monaco from "monaco-editor";
 
 import { monacoConfig2 } from "./monacoConfig";
 
-// monacoConfig2();
+monacoConfig2();
 
-function App() {
+function App() : ReactElement{
+  const editorRef = useRef(null);
+  function handleEditorDidMount(editor:any, monaco:any){
+    editorRef.current = editor;
+  }
+  // see in @monaco-editor/react page, looks for getValue later!
+  function doThing(){
+     // @ts-ignore
+    const editor = editorRef.current;
+     // @ts-ignore
+    var markers = [{
+        severity: monaco.MarkerSeverity.Error,
+     // @ts-ignore
+        message: "You are not allowed to type " + editor.getValue().split("\n")[0],
+        startLineNumber: 1,
+        startColumn: 1,
+        endLineNumber: 1,
+     // @ts-ignore
+        endColumn: editor.getModel().getLineLength(1) + 1
+    }];
+     // @ts-ignore
+    monaco.editor.setModelMarkers(editor.getModel(), "owner", markers)
+  }
   return (
-   <Editor
-     height="90vh"
-     defaultLanguage="mylang"
-     defaultValue="// some comment"
-   />
+   <>
+    <button onClick={doThing}>Check for errors</button>
+    <Editor
+      height="90vh"
+      defaultLanguage="mylang"
+      defaultValue="test134"
+      onMount={handleEditorDidMount}
+    />
+   </>
   );
 }
 
-function App2() {
-  return (
-    <div>hello there</div>
-  )
-}
-
 const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
-// ReactDOM.render(<App2/>, rootElement);
+ReactDOM.render(<App/>, rootElement);
